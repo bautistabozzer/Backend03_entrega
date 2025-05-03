@@ -6,8 +6,7 @@ import { petService } from '../services/pets.service.js';
 const router = Router();
 
 /**
- * Endpoint para generar usuarios mock
- * Mantiene la misma estructura de respuesta que el sistema original
+ * Ruta para obtener usuarios mock
  * @route GET /api/mocks/mockingusers
  */
 router.get('/mockingusers', async (req, res) => {
@@ -20,8 +19,7 @@ router.get('/mockingusers', async (req, res) => {
 });
 
 /**
- * Endpoint para generar mascotas mock
- * Mantiene la misma estructura y comportamiento que la implementación original
+ * Ruta para obtener mascotas mock
  * @route GET /api/mocks/mockingpets
  */
 router.get('/mockingpets', async (req, res) => {
@@ -34,7 +32,7 @@ router.get('/mockingpets', async (req, res) => {
 });
 
 /**
- * Endpoint para generar e insertar datos en la base de datos
+ * Ruta para generar e insertar usuarios y mascotas
  * Nuevo endpoint que no afecta la funcionalidad existente
  * @route POST /api/mocks/generateData
  */
@@ -87,6 +85,14 @@ router.post('/generateData', async (req, res) => {
     } catch (error) {
         res.status(500).json({ status: 'error', error: error.message });
     }
+});
+
+// Ruta para probar logs
+router.get('/loggerTest', (req, res) => {
+    console.log('[MOCKS] Log de nivel INFO: Prueba de logs desde /api/mocks/loggerTest');
+    console.warn('[MOCKS] Log de nivel WARN: Prueba de logs desde /api/mocks/loggerTest');
+    console.error('[MOCKS] Log de nivel ERROR: Prueba de logs desde /api/mocks/loggerTest');
+    res.json({ message: 'Logs generados correctamente. Revisa la consola del servidor.' });
 });
 
 export default router; 

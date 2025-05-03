@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Datos Mock</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Generador de Datos Mock</h1>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Generar Usuarios Mock</h5>
+                        <p class="text-muted mb-2" style="font-size: 0.95em;">
+                            Genera 50 usuarios de prueba solo para visualizar. No se guardan en la base de datos.
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <button id="generateUsers" class="btn btn-primary">Generar 50 Usuarios</button>
+                        <div id="usersResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Generar Usuarios y Mascotas</h5>
+                        <p class="text-muted mb-2" style="font-size: 0.95em;">
+                            Genera y guarda en la base de datos la cantidad de usuarios y mascotas que elijas. Los datos quedan registrados en MongoDB.
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <form id="generateDataForm">
+                            <div class="mb-3">
+                                <label for="usersCount" class="form-label">Cantidad de Usuarios</label>
+                                <input type="number" class="form-control" id="usersCount" value="5" min="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="petsCount" class="form-label">Cantidad de Mascotas</label>
+                                <input type="number" class="form-control" id="petsCount" value="8" min="1">
+                            </div>
+                            <button type="submit" class="btn btn-success">Generar Datos</button>
+                        </form>
+                        <div id="dataResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Resultados</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="results" class="results-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección para ver usuarios y mascotas existentes -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Ver Usuarios y Mascotas Existentes</h5>
+                    </div>
+                    <div class="card-body">
+                        <button id="showAllUsers" class="btn btn-outline-primary mb-2">Ver todos los usuarios</button>
+                        <button id="showAllPets" class="btn btn-outline-success mb-2">Ver todas las mascotas</button>
+                        <div id="allUsersPetsResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nueva sección para pruebas de logs -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Pruebas de Logs</h5>
+                        <p class="text-muted mb-2" style="font-size: 0.95em;">
+                            Prueba los diferentes niveles de logs en la consola del servidor.
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <button id="testLogs" class="btn btn-info">Probar Logs</button>
+                        <div id="logsResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Adopciones -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Adopciones</h5>
+                    </div>
+                    <div class="card-body">
+                        <button id="getAllAdoptions" class="btn btn-primary mb-2">Ver todas las adopciones</button>
+                        <form id="getAdoptionForm" class="mb-2">
+                            <div class="input-group">
+                                <input type="text" id="adoptionId" class="form-control" placeholder="ID de adopción">
+                                <button type="submit" class="btn btn-info">Buscar adopción por ID</button>
+                            </div>
+                        </form>
+                        <form id="createAdoptionForm">
+                            <div class="input-group mb-2">
+                                <input type="text" id="userId" class="form-control" placeholder="ID de usuario">
+                                <input type="text" id="petId" class="form-control" placeholder="ID de mascota">
+                                <button type="submit" class="btn btn-success">Adoptar mascota</button>
+                            </div>
+                        </form>
+                        <div id="adoptionsResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

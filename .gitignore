@@ -1,2 +1,5 @@
 node_modules
 /test
+/.env
+/Contenidos.pdf
+/Contenidos.txt

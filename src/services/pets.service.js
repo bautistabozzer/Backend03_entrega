@@ -1,4 +1,4 @@
-import PetDAO from '../dao/pets.dao.js';
+import PetDAO from '../dao/Pets.dao.js';
 
 /**
  * Servicio de mascotas que mantiene la compatibilidad con el sistema original

@@ -2,88 +2,85 @@ import { Router } from 'express';
 import { generateUsers, generatePets } from '../utils/mocking.utils.js';
 import { userService } from '../services/users.service.js';
 import { petService } from '../services/pets.service.js';
+import { validateGenerateData, validateMockingCount } from '../middlewares/validator.middleware.js';
+import { AppError } from '../middlewares/error.middleware.js';
 
 const router = Router();
 
 /**
  * Ruta para obtener usuarios mock
  * @route GET /api/mocks/mockingusers
+ * @query {number} count - Cantidad de usuarios a generar (opcional, default: 50)
  */
-router.get('/mockingusers', async (req, res) => {
+router.get('/mockingusers', validateMockingCount, async (req, res, next) => {
     try {
-        const users = await generateUsers(50);
-        res.json({ status: 'success', payload: users });
+        const count = parseInt(req.query.count) || 50;
+        const users = await generateUsers(count);
+        res.json({ 
+            status: 'success', 
+            payload: users,
+            count: users.length
+        });
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error.message });
+        next(new AppError(error.message, 500));
     }
 });
 
 /**
  * Ruta para obtener mascotas mock
  * @route GET /api/mocks/mockingpets
+ * @query {number} count - Cantidad de mascotas a generar (opcional, default: 100)
  */
-router.get('/mockingpets', async (req, res) => {
+router.get('/mockingpets', validateMockingCount, async (req, res, next) => {
     try {
-        const pets = generatePets(100);
-        res.json({ status: 'success', payload: pets });
+        const count = parseInt(req.query.count) || 100;
+        const pets = generatePets(count);
+        res.json({ 
+            status: 'success', 
+            payload: pets,
+            count: pets.length
+        });
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error.message });
+        next(new AppError(error.message, 500));
     }
 });
 
 /**
  * Ruta para generar e insertar usuarios y mascotas
- * Nuevo endpoint que no afecta la funcionalidad existente
  * @route POST /api/mocks/generateData
+ * @body {number} users - Cantidad de usuarios a generar (opcional)
+ * @body {number} pets - Cantidad de mascotas a generar (opcional)
  */
-router.post('/generateData', async (req, res) => {
+router.post('/generateData', validateGenerateData, async (req, res, next) => {
     try {
         const { users = 0, pets = 0 } = req.body;
         
-        // Validación de tipos y valores
-        if (typeof users !== 'number' || typeof pets !== 'number') {
-            return res.status(400).json({ 
-                status: 'error', 
-                error: 'Los valores deben ser números' 
-            });
-        }
-
-        if (users < 0 || pets < 0) {
-            return res.status(400).json({ 
-                status: 'error', 
-                error: 'Los valores deben ser números positivos' 
-            });
-        }
-
-        // Límite razonable para evitar sobrecarga
-        if (users > 1000 || pets > 1000) {
-            return res.status(400).json({ 
-                status: 'error', 
-                error: 'El límite máximo es 1000 registros por tipo' 
-            });
-        }
-
-        const mockUsers = await generateUsers(users);
-        const mockPets = generatePets(pets);
+        let results = {
+            users: [],
+            pets: []
+        };
 
         if (users > 0) {
-            await userService.createMany(mockUsers);
+            const mockUsers = await generateUsers(users);
+            results.users = await userService.createMany(mockUsers);
         }
 
         if (pets > 0) {
-            await petService.createMany(mockPets);
+            const mockPets = generatePets(pets);
+            results.pets = await petService.createMany(mockPets);
         }
 
         res.json({ 
             status: 'success', 
             message: `Se generaron ${users} usuarios y ${pets} mascotas correctamente`,
             payload: { 
-                generatedUsers: users, 
-                generatedPets: pets 
+                users: results.users.length,
+                pets: results.pets.length,
+                data: results
             }
         });
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error.message });
+        next(new AppError(error.message, 500));
     }
 });
 

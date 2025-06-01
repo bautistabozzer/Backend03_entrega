@@ -1,4 +1,4 @@
-import UserDAO from '../dao/users.dao.js';
+import UserDAO from '../dao/Users.dao.js';
 
 /**
  * Servicio de usuarios que mantiene la compatibilidad con el sistema original

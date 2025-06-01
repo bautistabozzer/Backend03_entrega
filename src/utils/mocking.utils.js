@@ -1,13 +1,16 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { faker } from '@faker-js/faker';
+
+// Valores por defecto en caso de que no existan las variables de entorno
+const DEFAULT_PASSWORD = process.env.DEFAULT_USER_PASSWORD || 'coder123';
+const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
 
 /**
  * Genera un usuario mock con la estructura compatible con el modelo User existente
  * @returns {Promise<Object>} Usuario mock con estructura MongoDB
  */
 const generateMockUser = async () => {
-    const password = 'coder123';
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, SALT_ROUNDS);
     
     return {
         _id: faker.database.mongodbObjectId(),
@@ -41,7 +44,7 @@ const generateMockPet = () => {
  * @param {number} count - Cantidad de usuarios a generar
  * @returns {Promise<Array>} Array de usuarios mock
  */
-const generateUsers = async (count) => {
+const generateUsers = async (count = 50) => {
     const users = [];
     for (let i = 0; i < count; i++) {
         users.push(await generateMockUser());
@@ -54,7 +57,7 @@ const generateUsers = async (count) => {
  * @param {number} count - Cantidad de mascotas a generar
  * @returns {Array} Array de mascotas mock
  */
-const generatePets = (count) => {
+const generatePets = (count = 100) => {
     const pets = [];
     for (let i = 0; i < count; i++) {
         pets.push(generateMockPet());
